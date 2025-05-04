@@ -5,11 +5,18 @@ import { columns } from "./columns";
 export default async function CompaniesPage() {
 	const supabase = await createClient();
 
-	const { data: applications } = await supabase.from("applications").select();
-
+	const { data: applications, error } = await supabase.from("applications").select(`
+      *,
+      company: companies (
+        id,
+        name
+      )
+    `);
+	console.log({ error, applications });
 	if (!applications) {
 		return <pre>No companies found</pre>;
 	}
+	console.log(applications[0]);
 	const fakeOne = {
 		company_id: 1,
 		created_at: "2023-01-02",
@@ -33,8 +40,8 @@ export default async function CompaniesPage() {
 		type: "program",
 	};
 
-	applications.push(fakeOne);
-	applications.push(fakeTwo);
+	// applications.push(fakeOne);
+	// applications.push(fakeTwo);
 
 	return (
 		<div className="container mx-auto py-10 px-5 w-screen max-w-7xl">

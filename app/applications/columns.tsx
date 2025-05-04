@@ -1,8 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-
+import { ArrowUpDown, Link2, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -13,13 +12,14 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableHeader } from "@/components/dataTable/partials/DataTableHeader";
+import LinkTargetBlank from "@/components/ui/LinkTargetBlank";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Application = {
+	company: {
+		id: number;
+		name: string | null;
+	} | null;
 	company_id: number | null;
 	created_at: string;
 	description: string | null;
@@ -33,70 +33,81 @@ export type Application = {
 
 export const columns: ColumnDef<Application>[] = [
 	{
-		accessorKey: "company_id",
-		header: ({ column }) => <DataTableHeader column={column} title="Company ID" />,
-		cell: ({ row }) => <div className="text-left  font-medium">{row.getValue("company_id")}</div>,
-	},
-	{
+		id: "applied",
 		accessorKey: "created_at",
-		header: ({ column }) => <DataTableHeader column={column} title="Created At" />,
-
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("created_at")}</div>,
-	},
-	{
-		accessorKey: "description",
-		header: ({ column }) => <DataTableHeader column={column} title="Description" />,
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("description")}</div>,
-	},
-
-	{
-		accessorKey: "link",
-		header: ({ column }) => <DataTableHeader column={column} title="Link" />,
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("link")}</div>,
-	},
-	{
-		accessorKey: "response_date",
-		header: ({ column }) => <DataTableHeader column={column} title="Response Date" />,
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("response_date")}</div>,
+		accessorFn: (row) => (row.created_at ? row.created_at.split("T")[0] : "N/A"),
+		header: ({ column }) => <DataTableHeader className="pl-1 md:pl-5" column={column} title="Applied" />,
+		cell: ({ row }) => <p className="text-left font-medium md:pl-4">{row.getValue("applied")}</p>,
 	},
 	{
 		accessorKey: "status",
-		header: ({ column }) => <DataTableHeader column={column} title="Status" />,
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("status")}</div>,
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="Status" />,
+		cell: ({ row }) => <p className="text-left font-medium ">{row.getValue("status")}</p>,
+	},
+	{
+		accessorKey: "company.name",
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="Company" />,
+		cell: ({ row }) => <p className="text-left font-medium">{row.getValue("company_name")} </p>,
 	},
 	{
 		accessorKey: "title",
-		header: ({ column }) => <DataTableHeader column={column} title="Title" />,
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("title")}</div>,
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="Title" />,
+		cell: ({ row }) => <p className="text-left font-medium">{row.getValue("title")}</p>,
 	},
 	{
 		accessorKey: "type",
-		header: ({ column }) => <DataTableHeader column={column} title="Type" />,
-		cell: ({ row }) => <div className="text-left font-medium">{row.getValue("type")}</div>,
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="Type" />,
+		cell: ({ row }) => <p className="text-left font-medium">{row.getValue("type")}</p>,
+	},
+	{
+		accessorKey: "description",
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="About" />,
+		cell: ({ row }) => <p className="text-left font-medium">{row.getValue("description")}</p>,
+	},
+	{
+		accessorKey: "link",
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="Link" />,
+
+		cell: ({ row }) => <LinkTargetBlank key={row.getValue("link")} href={row.getValue("link")} />,
+	},
+	{
+		id: "responseDate",
+		accessorKey: "response_date",
+		header: ({ column }) => <DataTableHeader className="pl-1" column={column} title="Replied" />,
+		accessorFn: (row) => (row.response_date ? row.response_date.split("T")[0] : "N/A"),
+		cell: ({ row }) => <p className="text-left font-medium">{row.getValue("responseDate")}</p>,
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => {
-			const application = row.original;
-
+		cell: () => {
 			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(application.id))}>
-							Copy payment ID
-						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<div className="w-full flex justify-end md:pr-3">
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" className="h-8 w-8 p-0">
+								<span className="sr-only">Open menu</span>
+								<MoreHorizontal className="h-4 w-4" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							<DropdownMenuItem className="p-0">
+								<Button variant="ghost" className="w-full">
+									<span className="sr-only">Edit</span>
+									Edit
+								</Button>
+							</DropdownMenuItem>
+							<DropdownMenuItem className="p-0">
+								<Button
+									variant="ghost"
+									className="w-full text-destructive focus:bg-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground"
+								>
+									<span className="sr-only">Delete</span>
+									Delete
+								</Button>
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
 			);
 		},
 	},

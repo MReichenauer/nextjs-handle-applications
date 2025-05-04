@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => {
 									return (
-										<TableHead key={header.id} className="w-[100px]">
+										<TableHead key={header.id}>
 											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 										</TableHead>
 									);
