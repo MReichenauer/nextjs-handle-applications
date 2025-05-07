@@ -17,6 +17,7 @@ export type Database = {
           id: number
           link: string | null
           response_date: string | null
+          role: string | null
           status: string | null
           title: string | null
           type: string | null
@@ -28,6 +29,7 @@ export type Database = {
           id?: number
           link?: string | null
           response_date?: string | null
+          role?: string | null
           status?: string | null
           title?: string | null
           type?: string | null
@@ -39,6 +41,7 @@ export type Database = {
           id?: number
           link?: string | null
           response_date?: string | null
+          role?: string | null
           status?: string | null
           title?: string | null
           type?: string | null
