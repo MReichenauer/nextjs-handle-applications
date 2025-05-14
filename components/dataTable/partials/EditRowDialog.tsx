@@ -12,8 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pen } from "lucide-react";
+import { ShadForm } from "./ShadForm";
 
-type EditableFields = {
+export type EditableFields = {
+	created_at: string;
 	title: string | null;
 	description: string | null;
 	status: string | null;
@@ -23,28 +25,14 @@ type EditableFields = {
 	company_name: string | null;
 };
 
-const Fields = ({ data }: { data: Partial<EditableFields> }) => {
-	return (
-		<div className="grid gap-4">
-			{Object.entries(data).map(([key, value]) => (
-				<div key={key} className="grid gap-2">
-					<Label htmlFor={key} className="capitalize">
-						{key.replace("_", " ")}
-					</Label>
-					<Input id={key} name={key} defaultValue={value ?? ""} placeholder={key.replace("_", " ")} />
-				</div>
-			))}
-		</div>
-	);
-};
-
 type EditRowDialogProps = {
 	data: Application;
 	onSave: (data: Partial<EditableFields>) => void;
 };
 
 const EditRowDialog = ({ data, onSave }: EditRowDialogProps) => {
-	const editableData: Partial<EditableFields> = {
+	const editableData: EditableFields = {
+		created_at: data.created_at,
 		title: data.title,
 		description: data.description,
 		status: data.status,
@@ -53,7 +41,7 @@ const EditRowDialog = ({ data, onSave }: EditRowDialogProps) => {
 		response_date: data.response_date,
 		company_name: data.company?.name ?? null,
 	};
-
+	console.log({ editableData });
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -66,10 +54,12 @@ const EditRowDialog = ({ data, onSave }: EditRowDialogProps) => {
 				<DialogHeader>
 					<DialogTitle>Edit Application</DialogTitle>
 					<DialogDescription>Desc Desc</DialogDescription>
-				</DialogHeader>
-				<Fields data={editableData} />
+				</DialogHeader>{" "}
+				<ShadForm data={editableData} />
 				<DialogFooter className="mt-4">
-					<Button type="submit">Save</Button>
+					<Button type="submit" form="editRowForm">
+						Save
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

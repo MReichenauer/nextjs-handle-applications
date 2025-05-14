@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import { ShadForm } from "@/components/dataTable/partials/ShadForm";
 
 export default async function CompaniesPage() {
 	const supabase = await createClient();
