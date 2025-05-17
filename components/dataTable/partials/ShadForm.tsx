@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { EditableFields } from "./EditRowDialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 const formSchema = z.object({
 	title: z.string().min(2, {
 		message: "Min 3 characters.",
@@ -64,14 +65,17 @@ export const ShadForm = ({ data }: ShadFormProps) => {
 								<FormLabel className="capitalize">{fieldName.replace("_", " ")}</FormLabel>
 								<FormControl>
 									{fieldName === "status" ? (
-										<select {...field} className="w-full">
-											<option value="">Select Status</option>
-											<option value="applied">Applied</option>
-											<option value="interview">Interview</option>
-											<option value="offer">Offer</option>
-											<option value="rejected">Rejected</option>
-											<option value="accepted">Accepted</option>
-										</select>
+										<Select defaultValue={field.value} onValueChange={field.onChange}>
+											<SelectTrigger>
+												<SelectValue>{field.value}</SelectValue>
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value="applied">Applied</SelectItem>
+												<SelectItem value="interview">Interview</SelectItem>
+												<SelectItem value="offer">Offer</SelectItem>
+												<SelectItem value="rejected">Rejected</SelectItem>
+											</SelectContent>
+										</Select>
 									) : (
 										<Input
 											{...field}
