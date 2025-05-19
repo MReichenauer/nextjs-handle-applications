@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
-import { ShadForm } from "@/components/dataTable/partials/ShadForm";
+import { DataTable } from "../../components/dataTable/DataTable";
+import { ApplicationColumns } from "../../components/dataTable/columns/ApplicationColumns";
 
 export default async function CompaniesPage() {
 	const supabase = await createClient();
@@ -19,7 +18,7 @@ export default async function CompaniesPage() {
 
 	return (
 		<div className="container mx-auto py-10 px-5 w-screen max-w-7xl">
-			<DataTable columns={columns} data={applications} />
+			<DataTable columns={ApplicationColumns} data={applications} />
 		</div>
 	);
 }

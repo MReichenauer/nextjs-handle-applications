@@ -1,29 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
 import { DataTableHeader } from "@/components/dataTable/partials/DataTableHeader";
 import LinkTargetBlank from "@/components/ui/LinkTargetBlank";
-import { EditRowDialog } from "@/components/dataTable/partials/EditRowDialog";
+import { EditApplicationDialog } from "@/components/dialogs/EditApplicationDialog";
+import { ApplicationType } from "@/app/globalTypes/ApplicationType";
 
-export type Application = {
-	company: {
-		id: number;
-		name: string | null;
-	} | null;
-	company_id: number | null;
-	created_at: string;
-	description: string | null;
-	id: number;
-	link: string | null;
-	response_date: string | null;
-	status: string | null;
-	title: string | null;
-	type: string | null;
-	role?: string | null;
-};
-
-export const columns: ColumnDef<Application>[] = [
+const ApplicationColumns: ColumnDef<ApplicationType>[] = [
 	{
 		id: "applied",
 		accessorKey: "created_at",
@@ -75,9 +58,11 @@ export const columns: ColumnDef<Application>[] = [
 			const application = row.original;
 			return (
 				<div className="w-full flex justify-end md:pr-3">
-					<EditRowDialog data={application} onSave={(data) => console.log("save", data)} />
+					<EditApplicationDialog data={application} />
 				</div>
 			);
 		},
 	},
 ];
+
+export { ApplicationColumns };
